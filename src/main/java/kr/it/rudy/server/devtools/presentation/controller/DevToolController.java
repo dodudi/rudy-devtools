@@ -16,7 +16,7 @@ public class DevToolController {
 
     @PostMapping("/json-parser")
     public ResponseEntity<ApiResponse<JsonParserResponse>> jsonParser(@RequestBody JsonParserRequest request) {
-        JsonParserResponse response = devToolService.jsonParser(request.json());
+        JsonParserResponse response = devToolService.jsonParser(request.json(), request.indent());
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
 }
