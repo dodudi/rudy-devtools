@@ -33,4 +33,16 @@ public class DevToolController {
         Base64Response response = devToolService.decodeBase64(request.text());
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
+
+    @PostMapping("/url-encode")
+    public ResponseEntity<ApiResponse<UrlResponse>> urlEncode(@Valid @RequestBody UrlRequest request) {
+        UrlResponse response = devToolService.encodeUrl(request.text());
+        return ResponseEntity.ok(ApiResponse.ok(response));
+    }
+
+    @PostMapping("/url-decode")
+    public ResponseEntity<ApiResponse<UrlResponse>> urlDecode(@Valid @RequestBody UrlRequest request) {
+        UrlResponse response = devToolService.decodeUrl(request.text());
+        return ResponseEntity.ok(ApiResponse.ok(response));
+    }
 }
