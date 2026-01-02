@@ -45,4 +45,16 @@ public class DevToolController {
         UrlResponse response = devToolService.decodeUrl(request.text());
         return ResponseEntity.ok(ApiResponse.ok(response));
     }
+
+    @PostMapping("/regex-test")
+    public ResponseEntity<ApiResponse<RegexResponse>> regexTest(@Valid @RequestBody RegexRequest request) {
+        RegexResponse response = devToolService.testRegex(
+                request.pattern(),
+                request.text(),
+                request.caseInsensitive(),
+                request.multiline(),
+                request.dotAll()
+        );
+        return ResponseEntity.ok(ApiResponse.ok(response));
+    }
 }

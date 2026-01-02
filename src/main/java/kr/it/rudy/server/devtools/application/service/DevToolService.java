@@ -1,8 +1,6 @@
 package kr.it.rudy.server.devtools.application.service;
 
-import kr.it.rudy.server.common.dto.Base64Response;
-import kr.it.rudy.server.common.dto.JsonParserResponse;
-import kr.it.rudy.server.common.dto.UrlResponse;
+import kr.it.rudy.server.common.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tools.jackson.core.util.DefaultIndenter;
@@ -12,7 +10,12 @@ import tools.jackson.databind.ObjectMapper;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 @Service
 @RequiredArgsConstructor
@@ -104,6 +107,74 @@ public class DevToolService {
             return new UrlResponse(null, false, "유효하지 않은 URL 인코딩 문자열입니다.");
         } catch (Exception e) {
             return new UrlResponse(null, false, e.getMessage());
+        }
+    }
+
+    public RegexResponse testRegex(String patternStr, String text, Boolean caseInsensitive, Boolean multiline, Boolean dotAll) {
+        try {
+            if (patternStr == null || patternStr.isEmpty()) {
+                return new RegexResponse(false, List.of(), 0, false, "정규표현식 패턴이 비어있습니다.");
+            }
+            if (text == null || text.isEmpty()) {
+                return new RegexResponse(false, List.of(), 0, false, "테스트 텍스트가 비어있습니다.");
+            }
+
+            // 플래그 설정
+            int flags = 0;
+            if (Boolean.TRUE.equals(caseInsensitive)) {
+                flags |= Pattern.CASE_INSENSITIVE;
+            }
+            if (Boolean.TRUE.equals(multiline)) {
+                flags |= Pattern.MULTILINE;
+            }
+            if (Boolean.TRUE.equals(dotAll)) {
+                flags |= Pattern.DOTALL;
+            }
+
+            // 패턴 컴파일
+            Pattern pattern = Pattern.compile(patternStr, flags);
+            Matcher matcher = pattern.matcher(text);
+
+            // 모든 매칭 찾기
+            List<RegexMatch> matches = new ArrayList<>();
+            while (matcher.find()) {
+                List<String> groups = new ArrayList<>();
+                // 그룹 추출 (0번 그룹은 전체 매칭이므로 1번부터)
+                for (int i = 1; i <= matcher.groupCount(); i++) {
+                    groups.add(matcher.group(i));
+                }
+
+                matches.add(new RegexMatch(
+                        matcher.group(),
+                        matcher.start(),
+                        matcher.end(),
+                        groups
+                ));
+            }
+
+            return new RegexResponse(
+                    true,
+                    matches,
+                    matches.size(),
+                    true,
+                    null
+            );
+        } catch (PatternSyntaxException e) {
+            return new RegexResponse(
+                    false,
+                    List.of(),
+                    0,
+                    false,
+                    "잘못된 정규표현식 패턴: " + e.getMessage()
+            );
+        } catch (Exception e) {
+            return new RegexResponse(
+                    false,
+                    List.of(),
+                    0,
+                    false,
+                    e.getMessage()
+            );
         }
     }
 }
