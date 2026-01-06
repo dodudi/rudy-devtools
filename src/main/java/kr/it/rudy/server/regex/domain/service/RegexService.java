@@ -19,9 +19,7 @@ public class RegexService {
         return new RegexResponse(
                 true,
                 matches,
-                matches.size(),
-                true,
-                null
+                matches.size()
         );
     }
 }

@@ -12,11 +12,11 @@ public class UrlService {
 
     public UrlResponse encodeUrl(String text) {
         String encodeUrl = urlProcessor.encodeUrl(text);
-        return new UrlResponse(encodeUrl, true, null);
+        return new UrlResponse(encodeUrl);
     }
 
     public UrlResponse decodeUrl(String text) {
         String decodeUrl = urlProcessor.decodeUrl(text);
-        return new UrlResponse(decodeUrl, true, null);
+        return new UrlResponse(decodeUrl);
     }
 }

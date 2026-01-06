@@ -13,6 +13,6 @@ public class JsonParserService {
     public JsonParserResponse jsonParser(String json, int indentSize) {
         String formattedJson = jsonParserProcessor.formattedJson(json, indentSize);
         String minifiedJson = jsonParserProcessor.minifiedJson(json);
-        return new JsonParserResponse(formattedJson, minifiedJson, true, null);
+        return new JsonParserResponse(formattedJson, minifiedJson, true);
     }
 }

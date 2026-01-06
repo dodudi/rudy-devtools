@@ -14,6 +14,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.core.exc.UnexpectedEndOfInputException;
 
+import java.time.format.DateTimeParseException;
 import java.util.regex.PatternSyntaxException;
 
 @Slf4j
@@ -60,6 +61,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
     }
 
+    @ExceptionHandler(NumberFormatException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNumberFormatException(NumberFormatException e) {
+        log.error("Number format error occurred: ", e);
+        ApiResponse<Void> response = ApiResponse.error("Invalid number format");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleNoHandlerFoundException(NoHandlerFoundException e) {
         log.error("No handler found: ", e);
@@ -85,6 +93,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleStreamReadException(StreamReadException e) {
         log.error("Stream read error occurred: ", e);
         ApiResponse<Void> response = ApiResponse.error("Invalid JSON format");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDateTimeParseException(DateTimeParseException e) {
+        log.error("Invalid date/time format: ", e);
+        ApiResponse<Void> response = ApiResponse.error("Invalid date/time format");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 

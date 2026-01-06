@@ -1,14 +1,13 @@
 package kr.it.rudy.server.base64.domain.service;
 
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.util.Base64;
 
 @Component
 public class Base64Processor {
     public String encodeBase64(String text) {
-        if (!StringUtils.hasText(text)) {
+        if (text == null || text.isEmpty()) {
             throw new IllegalArgumentException("encode text must not be empty or null");
         }
 
@@ -16,7 +15,7 @@ public class Base64Processor {
     }
 
     public String decodeBase64(String text) {
-        if (!StringUtils.hasText(text)) {
+        if (text == null || text.isEmpty()) {
             throw new IllegalArgumentException("decode text must not be empty or null");
         }
 

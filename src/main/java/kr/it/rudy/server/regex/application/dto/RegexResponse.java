@@ -5,8 +5,6 @@ import java.util.List;
 public record RegexResponse(
         boolean isValid,
         List<RegexMatch> matches,
-        int matchCount,
-        boolean success,
-        String errorMessage
+        int matchCount
 ) {
 }

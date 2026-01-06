@@ -2,6 +2,7 @@ package kr.it.rudy.server.json.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import tools.jackson.core.util.DefaultIndenter;
 import tools.jackson.core.util.DefaultPrettyPrinter;
 import tools.jackson.databind.ObjectMapper;
@@ -13,9 +14,11 @@ public class JsonParserProcessor {
     private final ObjectMapper objectMapper;
 
     public String formattedJson(String json, int indentSize) {
-        Object parsedJson = parsedJson(json);
+        if (!StringUtils.hasText(json)) {
+            throw new IllegalArgumentException("json must not be empty or null");
+        }
 
-        // 포맷팅된 JSON 생성
+        Object parsedJson = objectMapper.readValue(json, Object.class);
         String indent = " ".repeat(Math.max(0, indentSize));
 
         DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
@@ -28,12 +31,11 @@ public class JsonParserProcessor {
     }
 
     public String minifiedJson(String json) {
-        Object parsedJson = parsedJson(json);
+        if (!StringUtils.hasText(json)) {
+            throw new IllegalArgumentException("json must not be empty or null");
+        }
+
+        Object parsedJson = objectMapper.readValue(json, Object.class);
         return objectMapper.writeValueAsString(parsedJson);
     }
-
-    private Object parsedJson(String json) {
-        return objectMapper.readValue(json, Object.class);
-    }
-
 }

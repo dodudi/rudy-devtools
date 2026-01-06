@@ -6,8 +6,6 @@ public record TimestampResponse(
         String iso8601,
         String formatted,
         String rfc2822,
-        String timezone,
-        boolean success,
-        String errorMessage
+        String timezone
 ) {
 }
